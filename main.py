@@ -3,68 +3,27 @@
 
 ## Approach 1: Basic Nutrition
 
-Taking patients having basic nutrition
-WITH cte AS (
-    SELECT
-        case_id,
-        breakfast_meal,
-        lunch_meal,
-        meal_dinner,
-        vegetables,
-        bean,
-        fruits,
-        prepartum_maternal_weight,
-        CASE
-            WHEN breakfast_meal + lunch_meal + meal_dinner + vegetables + bean + fruits >= 3 THEN 1
-            ELSE 0
-        END AS basic_nutrition
-    FROM public.maternal_patient_data
-)
-SELECT
-    case_id,
-    prepartum_maternal_weight
-FROM cte
-WHERE basic_nutrition = 0
-ORDER BY case_id;
+Taking patients having basic nutrition (by comparing the columns in the query) : if it's greater than 3, they will come under 'yes' or 'no'
+
 As per this logic, 72 patients didn't meet basic nutrition. Further comparison with different columns, weights, and glucose might be needed. If needed, we can drop.
 
 Approach 2: High-Calorie Intake
  Added cookies and pasta for high-intake calories
-WITH cte AS (
-    SELECT
-        case_id,
-        pasta,
-        cookies,
-        newborn_weight,
-        prepartum_maternal_weight,
-        preeclampsia_record_pregnancy,
-        CASE
-            WHEN pasta + cookies >= 2 THEN 1
-            ELSE 0
-        END AS regular_high_calorie_intake
-    FROM public.maternal_patient_data
-)
-SELECT prepartum_maternal_weight
-FROM cte
-WHERE regular_high_calorie_intake = 1;
 Here, 64 patients both used cookies and pasta regularly. Considering prepartum weight (17 patients' weight is 80 and above) might be helpful in further analysis.
 
 Sub-Approaches:
 2(a): Patients with 0 in basic nutrition and 1 in high intake calories, 16 patients (6) are above weight.
 2(b): Using 'or', patients above 80 weight, 30.
-This is the initial research on nutrition. Suggestions are needed. Will it be helpful in our analysis? Do we need to think differently? If we go by this approach, we will have basic_nutrition_column and high_calorie_column for nutrition, and we can drop the remaining.
 
 Hypertension
 Columns:
 
 right_systolic_blood_pressure
 left_systolic_blood_pressure
-Mean_systolic_bp
+ we can take Mean_systolic_bp
 left_diastolic_blood_pressure
 right_diastolic_blood_pressure
-mean_diastolic_bp
-Drop Records
-Drop records in 'hypertension_past_treatment' column where the value is 'yes' and details or clarity are not available for these 3 patients. These patients are already included in another column, 'hypertension_past_reported,' where their entries exist.
+we can take mean_diastolic_bp
 
 Labor Admission Day / Newborn
 Set the delivery mode based on numeric values ranging from 0 to 12 in the c-section column. To simplify interpretation, categorize them into 0, 1, or 2. This approach helps avoid further confusion. The Delivery_mode column is coded as follows:
