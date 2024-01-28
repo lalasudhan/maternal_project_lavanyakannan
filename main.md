@@ -110,3 +110,7 @@ Update tobacco_use_in_months, tobacco_use, tobacco_quantity_by_day:
 Note: [Types of Alcohol](https://nationaltasc.org/types-of-alcohol/) for future reference.
 
 **Additional Changes:
+- changing weight column not applicable to null and changing data type to numeric
+- fetal_weight_columns related column replace query to change comma to empty string and alter datatype
+
+
